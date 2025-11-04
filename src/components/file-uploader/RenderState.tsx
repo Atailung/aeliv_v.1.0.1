@@ -39,9 +39,14 @@ export function RenderErrorState (){
 }
 
 
-export function RenderUploadingState({
-  previewUrl
-}: {previewUrl: string}) {
+export function RenderDeletingState({
+  previewUrl, 
+  isDeleting,
+  handleRemoveFile,
+}: {previewUrl: string;
+  isDeleting?: boolean;
+  handleRemoveFile?: () => void;
+}) {
     return(
       <>
       <Image 
@@ -52,14 +57,33 @@ export function RenderUploadingState({
         className="object-contain p-2"
       />
 
-       <Button variant={"destructive"} size={"icon"} className={cn("absolute top-4 right-4 rounded-full hover:bg-red-500")} onClick={() => URL.revokeObjectURL(previewUrl)}>
-        <XIcon className=" hover:animation-spin" />
+       <Button variant={"destructive"} onClick={handleRemoveFile} disabled={isDeleting} size={"icon"} className={cn("absolute top-4 right-4 rounded-full hover:bg-red-500")}>
+        {
+          isDeleting ? <IconReload className=" animate-spin hover:red-600" /> : <XIcon className="size-4" />
+        }
        </Button>
       </>
     )
 }
 
 
-
-
+export function RenderUploadingState({
+  progress, 
+  file,
+}: {
+  progress: number;
+  file: File;
+}) {
+    return(
+      <div className="text-center flex justify-center items-center flex-col">
+        <p className="mt-2 text-sm font-medium text-foreground">Uploading... {file.name}...</p>
+        <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+          <div 
+            className="bg-green-600 h-2.5 rounded-full transition-all duration-300" 
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+      </div>
+    )
+}
 

@@ -46,6 +46,7 @@
     "better-auth": "^1.3.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^17.2.3",
     "input-otp": "^1.4.2",
     "install": "^0.13.0",
     "lucide-react": "^0.539.0",

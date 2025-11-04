@@ -18,7 +18,7 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
         </Link>
       <div className="flex w-full max-w-sm flex-col gap-6">
         <Link href="/" className="text-center text-2xl font-bold">
-          <Image src= '/' alt='logo aeliv' width={100} height={100} className="mx-auto mb-4" />
+          <Image src='/logo.jpg' alt='logo aeliv' width={100} height={100} className="mx-auto mb-4" />
           Aeliv
         </Link>
         {children}

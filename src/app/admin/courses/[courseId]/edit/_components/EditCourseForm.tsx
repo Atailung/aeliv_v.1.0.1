@@ -1,102 +1,86 @@
-"use client"
+"use client";
 
-import { Button, buttonVariants } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button,  } from '@/components/ui/button'
+
 import { CourseCategories, CourseLevels, CourseSchema, CourseSchemaType, CourseStatus } from '@/lib/ZodSchemas'
-import { ArrowLeft, PlusIcon, SparkleIcon } from 'lucide-react'
-import Link from 'next/link'
+import { PlusIcon, SparkleIcon } from 'lucide-react'
+
 import React, { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import dynamic from 'next/dynamic'
-import slugify from "slugify"
+
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Uploader from '@/components/file-uploader/Uploader'
 import { toast } from 'sonner'
 import { tryCatch } from '@/hooks/try-catch'
 import { useRouter } from 'next/navigation'
-import { CreateCourse } from './actions'
+import { RichTextEditor } from '@/components/rich-text-editor/Editor';
+import { editCourse } from '../action';
+import { AdminCourseSingularType } from '@/app/data/admin/admin-get-course';
 
-// Dynamic import to prevent SSR hydration issues
-const RichTextEditor = dynamic(() => import('@/components/rich-text-editor/Editor').then(mod => ({ default: mod.RichTextEditor })), {
-  ssr: false,
-  loading: () => <div className="min-h-[200px] border rounded-md p-3 bg-gray-50">Loading editor...</div>
-})
+interface iAppProps{
+    data: AdminCourseSingularType;
+}
 
-function CreateCoursesPage() {
-  const [isPending, startTransition] = useTransition()
-  const router = useRouter();
-  const form = useForm<CourseSchemaType>({
-    resolver: zodResolver(CourseSchema),
-    defaultValues: {
-      title: '',
-      slug: '',
-      description: '',
-      fileKey: '',
-      duration: 0,
-      price: 0,
-      level: 'BEGINNER',
-      category: "WEB_DEVELOPMENT",
-      smallDescription: '',
-      status: 'DRAFT',
-    }
-  })
+function EditCourseForm({ data }: iAppProps) {
+    const [isPending, startTransition] = useTransition()
+      const router = useRouter();
+      const form = useForm<CourseSchemaType>({
+        resolver: zodResolver(CourseSchema),
+        defaultValues: {
+          title: data.title,
+          slug: data.slug,
+          description: data.description,
+          fileKey: data.filekey,
+          duration: data.duration,
+          price: data.price,
+          level: data.level,
+          category: data.category as CourseSchemaType['category'],
+          smallDescription: data.smallDescription,
+          status: data.status,
+        }
+      })
 
-  // Submit handler with proper error handling
-  function onSubmit(values: CourseSchemaType) {
-    startTransition(async() => {
-      const { data: result, error } = await tryCatch(CreateCourse(values));
-      if (error) {
-        console.error('Error creating course:', error)
-        toast.error('Failed to create course. Please try again.')
-        return
-      }
-      if(result?.status === "success"){
-        toast.success('Course created successfully!')
-        form.reset()
-        router.push('/admin/courses');
-      } else if (result?.status === "error"){
-        toast.error(result.message)
-      }
-    })
-  }
+      function onSubmit(values: CourseSchemaType) {
+          startTransition(async() => {
+            const { data: result, error } = await tryCatch(editCourse(values, data.id));
+            if (error) {
+              console.error('Error creating course:', error)
+              toast.error('Failed to create course. Please try again.')
+              return
+            }
+            if(result?.status === "success"){
+              toast.success('Course created successfully!')
+              form.reset()
+              router.push('/admin/courses');
+            } else if (result?.status === "error"){
+              toast.error(result.message)
+            }
+          })
+        }
+        const generateSlug = () => {
+            const titleValue = form.getValues('title')
+            if (!titleValue.trim()) {
+              toast.error('Please enter a title first')
+              return
+            }
+            const slug = titleValue
+              .toLowerCase()
+              .replace(/\s+/g, '-')
+              .replace(/[^\w-]+/g, '')
+              .replace(/--+/g, '-')
+              .trim()
+            form.setValue('slug', slug)
+          }
 
-  const generateSlug = () => {
-    const titleValue = form.getValues('title')
-    if (!titleValue.trim()) {
-      toast.error('Please enter a title first')
-      return
-    }
-    
-    const slug = slugify(titleValue, { lower: true, strict: true })
-    form.setValue('slug', slug, { shouldValidate: true })
-    toast.success('Slug generated successfully!')
-  }
-
+            
+      
   return (
-    <>
-    <div className='flex items-center gap-4'>
-      <Link href="/admin/courses" className={buttonVariants({ variant: 'outline', size: 'icon' })}>
-       <ArrowLeft  className='size-5'/>
-      </Link>
-
-      <h1 className='text-2xl font-bold'>
-        Create Course
-      </h1>
-    </div>
-
-    <Card>
-      <CardHeader>
-        <CardTitle>Basic Information</CardTitle>
-        <CardDescription>
-          Provide the basic information for the course.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
+   
+      <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 w-full'>
             <FormField 
               control={form.control} 
@@ -171,7 +155,7 @@ function CreateCoursesPage() {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <RichTextEditor 
+                    <RichTextEditor
                       field={field}
                     />
                   </FormControl>
@@ -341,7 +325,7 @@ function CreateCoursesPage() {
                 disabled={isPending}
                 className="flex-1"
               >
-                {isPending ? 'Creating...' : 'Create Course'} 
+                {isPending ? 'Update...' : 'Update Course'} 
                 <PlusIcon className='ml-1' size={16} />
               </Button>
               
@@ -356,10 +340,8 @@ function CreateCoursesPage() {
             </div>
           </form>
         </Form>
-      </CardContent>
-    </Card>
-    </>
+    
   )
 }
 
-export default CreateCoursesPage
+export default EditCourseForm

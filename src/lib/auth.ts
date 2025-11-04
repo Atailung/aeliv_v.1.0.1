@@ -4,7 +4,12 @@ import { prisma } from "./db"; // Adjust to your custom path // Adjust if using 
 import { env } from "./env";
 import { emailOTP } from "better-auth/plugins";
 import { resend } from "./resend";
-import "server-only"
+
+import { admin } from "better-auth/plugins"
+
+
+
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -27,5 +32,6 @@ export const auth = betterAuth({
         });
       },
     }),
+    admin()
   ],
 });
