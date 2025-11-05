@@ -6,7 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "install:fast": "pnpm install --prefer-offline --reporter=silent",
+    "clean:cache": "pnpm store prune && pnpm cache clear",
+    "deps:update": "pnpm update --latest"
   },
   "dependencies": {
     "@arcjet/inspect": "1.0.0-beta.10",

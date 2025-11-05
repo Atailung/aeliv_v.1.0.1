@@ -1,0 +1,37 @@
+# PNPM Performance Optimization Configuration
+
+# Use faster registry (already configured globally)
+registry=https://registry.npmmirror.com/
+
+# Enable faster hashing algorithm
+package-manager-strict=false
+
+# Use shallow cloning for Git dependencies
+git-shallow-clone=true
+
+# Enable network concurrency for faster downloads
+network-concurrency=16
+
+# Side effects cache for faster installs
+side-effects-cache=true
+
+# Use hardlinks when possible (faster than copying)
+store-dir=~/.pnpm-store
+
+# Auto install peers to avoid manual resolution
+auto-install-peers=true
+
+# Skip optional dependencies that often cause issues
+optional=false
+
+# Prefer offline packages when available
+prefer-offline=true
+
+# Enable progress reporting
+reporter=default
+
+# Faster resolution algorithm
+resolution-mode=highest
+
+# Skip integrity checks for faster installs (use with caution)
+# verify-store-integrity=false

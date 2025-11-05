@@ -50,7 +50,7 @@ const EditRoute = async ({ params }: EditRouteProps) => {
                         </CardDescription>
                         <CardContent>
                             {/* Course Structure Form Goes Here */}
-                            <CourseStructure  />
+                            <CourseStructure data={data} />
                         </CardContent>
                     </CardHeader>
                 </Card>

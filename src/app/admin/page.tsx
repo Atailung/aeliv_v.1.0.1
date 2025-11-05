@@ -1,3 +1,5 @@
+"use client"
+
 import { ChartAreaInteractive } from '@/components/sidebar/chart-area-interactive'
 import { DataTable } from '@/components/sidebar/data-table'
 import { SectionCards } from '@/components/sidebar/section-cards'
@@ -5,7 +7,7 @@ import React from 'react'
 import data from "./data.json"
 
 
-const page = () => {
+const AdminIndexPage = async () => {
   return (
     <div>
       <SectionCards />
@@ -17,4 +19,4 @@ const page = () => {
   )
 }
 
-export default page
+export default AdminIndexPage

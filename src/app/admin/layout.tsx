@@ -5,11 +5,13 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { ReactNode } from "react"
+import { requireAdmin } from "@/app/data/admin/require-admin"
 
+export default async function AdminLayout({ children }: { children: ReactNode }) {
+  // This will handle authentication and authorization
+  // If user is not admin, they'll be redirected automatically
+  await requireAdmin();
 
-
-
-export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider
       style={
