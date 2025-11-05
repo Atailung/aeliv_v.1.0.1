@@ -8,11 +8,15 @@ import {CSS} from '@dnd-kit/utilities';
 import { AdminCourseSingularType } from '@/app/data/admin/admin-get-course'
 import { cn } from '@/lib/utils'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
-import { ChevronDown, ChevronRight, FileText, GripVertical, Plus, Trash2 } from 'lucide-react'
+import { ChevronDown, ChevronRight, Delete, FileText, GripVertical, Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import {reorderChapters, reorderLessons} from "../action"
+import NewChapterModal from './NewChapterModal'
+import NewLessonModal from './NewLessonModal'
+import DeleteLesson from './DeleteLesson'
+import DeleteChapter from './DeleteChapter'
 
 
 
@@ -239,6 +243,7 @@ function CourseStructure({ data }: iAppProps) {
           <CardTitle>
             Chapters
           </CardTitle>
+              <NewChapterModal  courseId={data.id} />
         </CardHeader>
         <CardContent className='space-y-8'>
           <SortableContext 
@@ -268,9 +273,7 @@ function CourseStructure({ data }: iAppProps) {
                         </CollapsibleTrigger>
                           <p className='cursor-pointer hover:text-primary pl-2'>{item.title}</p>
                       </div>
-                      <Button variant={"outline"} size={"icon"}>
-                        <Trash2 className='size-4 text-red-500' />
-                      </Button>
+                      <DeleteChapter  chapterId={item.id} courseId={data.id} />
                     </div>
                     <CollapsibleContent>
                       <div className='p-1 '>
@@ -288,10 +291,9 @@ function CourseStructure({ data }: iAppProps) {
                                     <Link href={`/admin/courses/${data.id}/${item.id}/${lesson.id}/edit`} className='hover:text-primary'>
                                       {lesson.title}
                                     </Link>
+
                                   </div>
-                                  <Button variant={"outline"} size={"icon"}>
-                                    <Trash2 className='size-4 text-red-500' />
-                                  </Button>
+                                  <DeleteLesson lessonId={lesson.id} chapterId={item.id} courseId={data.id} />
                                 </div>
                               )}
                             </SortableItem>
@@ -299,10 +301,7 @@ function CourseStructure({ data }: iAppProps) {
 
                         </SortableContext>
                         <div className='p-2'>
-                          <Button variant={"outline"} className='w-full'>
-                            <Plus className='size-4' />
-                            Add Lesson
-                          </Button>
+                          <NewLessonModal courseId={data.id} chapterId={item.id} />
                         </div>
                       </div>
                     </CollapsibleContent>

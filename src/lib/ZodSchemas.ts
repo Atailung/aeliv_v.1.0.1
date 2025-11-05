@@ -1,4 +1,6 @@
+import { description } from "@/components/sidebar/chart-area-interactive";
 import { z } from "zod";
+import { th } from "zod/v4/locales";
 
 export const CourseLevels = ["BEGINNER", "INTERMEDIATE", "ADVANCED"] as const;
 
@@ -18,7 +20,7 @@ export const CourseCategories = [
   "HEALTH",
   "FINANCE",
   "MUSIC",
-  "PERSONAL_DEVELOPMENT"
+  "PERSONAL_DEVELOPMENT",
 ] as const;
 
 export const CourseSchema = z.object({
@@ -46,10 +48,9 @@ export const CourseSchema = z.object({
   level: z.enum(CourseLevels, {
     message: "Level must be one of BEGINNER, INTERMEDIATE, ADVANCED",
   }),
-  category: z
-    .enum(CourseCategories, {
-      message: "Category must be Required",
-    }),
+  category: z.enum(CourseCategories, {
+    message: "Category must be Required",
+  }),
   smallDescription: z
     .string()
     .min(10, {
@@ -78,3 +79,33 @@ export type CourseSchemaType = {
   status: (typeof CourseStatus)[number];
   price?: number;
 };
+
+export type CourseUpdateSchemaType = z.infer<typeof CourseSchema>;
+
+export const ChapterSchema = z.object({
+  name: z
+    .string()
+    .min(3, { message: "Name must be at least 3 characters long" })
+    .max(100, { message: "Name must be at most 100 characters long" }),
+  CourseId: z.string().uuid({ message: "Invalid Course ID" }),
+});
+
+export type ChapterSchemaType = z.infer<typeof ChapterSchema>;
+
+export const LessonSchema = z.object({
+  name: z
+    .string()
+    .min(3, { message: "Name must be at least 3 characters long" })
+    .max(100, { message: "Name must be at most 100 characters long" }),
+  courseId: z.string().uuid({ message: "Invalid Course ID" }),
+  chapterId: z.string().uuid({ message: "Invalid Chapter ID" }),
+  description: z.string().max(1000).optional(),
+  videoKey: z.string().optional(),
+  thumbnailKey: z.string().optional(),
+  position: z
+    .number()
+    .min(1, { message: "Position must be at least 1" })
+    .optional(),
+});
+
+export type LessonSchemaType = z.infer<typeof LessonSchema>;
