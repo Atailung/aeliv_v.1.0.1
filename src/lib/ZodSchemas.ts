@@ -36,13 +36,14 @@ export const CourseSchema = z.object({
     .string()
     .min(10, { message: "Description must be at least 10 characters long" })
     .max(1000, { message: "Description must be at most 1000 characters long" }),
-  fileKey: z
+  filekey: z
     .string()
     .min(1, { message: "File key must be at least 1 character long" })
     .max(100, { message: "File key must be at most 100 characters long" }),
-  price: z.number().min(1, { message: "Price must be at least 1" }).optional(),
+  price: z.number().min(0, { message: "Price must be at least 0" }),
   duration: z
     .number()
+    .int({ message: "Duration must be a whole number" })
     .min(1, { message: "Duration must be at least 1" })
     .max(500, { message: "Duration must be at most 500" }),
   level: z.enum(CourseLevels, {
@@ -67,18 +68,7 @@ export const CourseSchema = z.object({
   // updatedAt: z.date().default(() => new Date()),
 });
 
-export type CourseSchemaType = {
-  title: string;
-  slug: string;
-  description: string;
-  fileKey: string;
-  duration: number;
-  level: (typeof CourseLevels)[number];
-  category: (typeof CourseCategories)[number];
-  smallDescription: string;
-  status: (typeof CourseStatus)[number];
-  price?: number;
-};
+export type CourseSchemaType = z.infer<typeof CourseSchema>;
 
 export type CourseUpdateSchemaType = z.infer<typeof CourseSchema>;
 

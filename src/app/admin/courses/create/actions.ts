@@ -6,6 +6,7 @@ import { prisma } from "@/lib/db";
 import { ApiResponse } from "@/lib/types";
 import { CourseSchema, CourseSchemaType } from "@/lib/ZodSchemas";
 import { request } from "@arcjet/next";
+import { revalidatePath } from "next/cache";
 
 const aj = arcjet
   .withRule(
@@ -41,16 +42,17 @@ export async function CreateCourse(
     });
 
     if (decision.isDenied()) {
-      if(decision.reason.isRateLimit()) {
-       return {
-        status : "error",
-        message : "Too many requests. Please try again later."
-       }
-      }else{
+      if (decision.reason.isRateLimit()) {
         return {
           status: "error",
-          message: "Request denied by security rule. you are a bot, never touch my sites.",
-        }
+          message: "Too many requests. Please try again later.",
+        };
+      } else {
+        return {
+          status: "error",
+          message:
+            "Request denied by security rule. you are a bot, never touch my sites.",
+        };
       }
     }
 
@@ -86,7 +88,7 @@ export async function CreateCourse(
         slug: validation.data.slug,
         description: validation.data.description,
         smallDescription: validation.data.smallDescription,
-        filekey: validation.data.fileKey, // Fixed: using filekey as per schema
+        filekey: validation.data.filekey, // Fixed: using filekey as per schema
         duration: validation.data.duration,
         price: validation.data.price ?? 0,
         level: validation.data.level,
@@ -97,6 +99,9 @@ export async function CreateCourse(
     });
 
     console.log("Course created successfully:", course.id);
+
+    revalidatePath("/admin/courses");
+
     return {
       status: "success",
       message: "Course created successfully",

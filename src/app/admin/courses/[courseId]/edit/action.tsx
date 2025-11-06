@@ -68,6 +68,9 @@ export async function editCourse(
       data: result,
     });
 
+    revalidatePath("/admin/courses");
+    revalidatePath(`/admin/courses/${courseId}/edit`);
+
     return {
       status: "success",
       message: "Course updated successfully",
@@ -388,8 +391,6 @@ export async function deleteLesson({
 //     };
 //   }
 // }
-
-
 
 export async function deleteChapter({
   chapterId,

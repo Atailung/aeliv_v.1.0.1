@@ -1,12 +1,11 @@
 import "server-only";
 import { requireAdmin } from "./require-admin";
 import { prisma } from "@/lib/db";
-import { description } from "@/components/sidebar/chart-area-interactive";
-import { th } from "zod/v4/locales";
+
 
 export async function adminGetCourse(id: string) {
   await requireAdmin();
-
+  // await new Promise<void>((resolve) => setTimeout(resolve, 10000)); // artificial delay for demo purposes 10s
   const data = await prisma.course.findUnique({
     where: { id: id },
 
