@@ -175,6 +175,7 @@ function EditCourseForm({ data }: iAppProps) {
                       value={field.value} 
                       onChange={field.onChange}
                       disabled={isPending}
+                      fileTypeAccept="image"
                     />
                   </FormControl>
                   <FormMessage />

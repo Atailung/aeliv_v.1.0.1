@@ -7,6 +7,7 @@ import { RenderState, RenderUploadingState, RenderDeletingState } from './Render
 import { toast} from 'sonner'
 import {v4 as uuidv4} from "uuid"
 import { useConstructUrl } from '@/hooks/use-construct'
+import { file } from 'zod'
 
 interface UploaderState {
   id: string | null
@@ -17,16 +18,17 @@ interface UploaderState {
   isDeleting: boolean
   error: boolean
   objectUrl?: string
-  fileType: "image" 
+  fileType: "image" | "video"
 }
 
 interface iAppProps {
   value?: string;
   onChange?: (url: string) => void;
   disabled?: boolean;
+  fileTypeAccept: "image" | "video";
 }
 
-function Uploader({value, onChange, disabled = false}: iAppProps) {
+function Uploader({value, onChange, fileTypeAccept, disabled = false}: iAppProps) {
   const fileUrl = useConstructUrl(value || "");
   const [fileState, setFileState] = useState<UploaderState>({
     error: false,
@@ -36,7 +38,7 @@ function Uploader({value, onChange, disabled = false}: iAppProps) {
     key: value,
     progress: 0,
     Uploading: false,
-    fileType: "image",
+    fileType: fileTypeAccept,
     objectUrl: value ? fileUrl : undefined,
     
   })
@@ -50,8 +52,9 @@ function Uploader({value, onChange, disabled = false}: iAppProps) {
     };
   }, [fileState.objectUrl]);
 
-  async function UploadFile(file: File){
-    const fileType = file.type.split("/")[0] as "image" 
+  const uploadFile = useCallback(
+    async(file: File) => {
+      const fileType = file.type.split("/")[0] as "image" 
     setFileState((pre) => ({
       ...pre,
       file: file,
@@ -71,7 +74,7 @@ function Uploader({value, onChange, disabled = false}: iAppProps) {
           fileName: file.name,
           contentType: file.type,
           size: file.size,
-          isImage: true,
+          isImage: fileTypeAccept === "image" ? true : false,
         })
       })
 
@@ -149,7 +152,10 @@ function Uploader({value, onChange, disabled = false}: iAppProps) {
         progress: 0,
       }))
     }
-  }
+
+    }, [fileTypeAccept, onChange]
+  )
+
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if(acceptedFiles.length > 0) {
@@ -157,8 +163,8 @@ function Uploader({value, onChange, disabled = false}: iAppProps) {
 
       
       // Validate file type
-      const fileType = file.type.split("/")[0] as "image"
-      if (fileType !== "image") {
+      const fileType = file.type.split("/")[0] as "image" | "video"
+      if (fileType !== fileTypeAccept) {
         toast.error("Only image files are allowed");
         return;
       }
@@ -183,11 +189,11 @@ function Uploader({value, onChange, disabled = false}: iAppProps) {
         id: uuidv4(),
         isDeleting: false,
         key: undefined,
-        fileType
+        fileType: fileTypeAccept,
       })
-      UploadFile(file)
+      uploadFile(file)
     }
-  }, [fileState.objectUrl])
+  }, [fileState.objectUrl, fileTypeAccept, uploadFile]);
 
   function rejectedFiles(fileRejections: FileRejection[]) {
     if(fileRejections.length) {
@@ -233,7 +239,7 @@ function Uploader({value, onChange, disabled = false}: iAppProps) {
   
     if(fileState.objectUrl) {
       return (
-        <RenderDeletingState handleRemoveFile={handleRemoveFile} isDeleting={fileState.isDeleting} previewUrl={fileState.objectUrl} />
+        <RenderDeletingState handleRemoveFile={handleRemoveFile} isDeleting={fileState.isDeleting} previewUrl={fileState.objectUrl} fileType={fileState.fileType} />
       );
     }
     return <RenderState isDragActive={isDragActive} />
@@ -277,7 +283,7 @@ function Uploader({value, onChange, disabled = false}: iAppProps) {
         objectUrl: undefined,
         progress: 0,
         Uploading: false,
-        fileType: "image"
+        fileType: fileTypeAccept,
       })
       toast.success("File deleted successfully")
     } catch (error) {
@@ -302,10 +308,10 @@ function Uploader({value, onChange, disabled = false}: iAppProps) {
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop, 
-    accept: {"image/*" : []},
+    accept: fileTypeAccept === 'video'? {'video/*': []} : {'image/*': []},
     multiple: false,
     maxFiles: 1,
-    maxSize: 5 * 1024 * 1024, // 5 MB
+    maxSize: fileTypeAccept === "image" ? 5 * 1024 * 1024 : 5000 * 1024 * 1024, // 5 MB for images, 5 GB for videos
     onDropRejected: rejectedFiles,
     disabled: disabled || fileState.Uploading || !!fileState.key
   })

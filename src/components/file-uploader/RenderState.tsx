@@ -43,26 +43,26 @@ export function RenderDeletingState({
   previewUrl, 
   isDeleting,
   handleRemoveFile,
+  fileType,
 }: {previewUrl: string;
   isDeleting?: boolean;
+  fileType: "image" | "video";
   handleRemoveFile?: () => void;
 }) {
     return(
-      <>
-      <Image 
-        src={previewUrl} 
-        alt="Preview"
-        width={350}
-        height={250}
-        className="object-contain p-2"
-      />
+      <div className="relative group w-full h-full flex justify-center items-center">
+     {fileType === "video" ? (
+        <video src={previewUrl} className="w-full h-full rounded-md" controls />
+     ) : (
+        <Image src={previewUrl} alt="Preview" className="w-full h-full rounded-md" width={400} height={300} />
+     )}
 
        <Button variant={"destructive"} onClick={handleRemoveFile} disabled={isDeleting} size={"icon"} className={cn("absolute top-4 right-4 rounded-full hover:bg-red-500")}>
         {
           isDeleting ? <IconReload className=" animate-spin hover:red-600" /> : <XIcon className="size-4" />
         }
        </Button>
-      </>
+      </div>
     )
 }
 
