@@ -57,7 +57,7 @@ export default function NewChapterModal({courseId}: {courseId: string}) {
                     New Chapter
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[42px]">
+            <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                    <DialogTitle>Create New Chapter</DialogTitle>
                    <DialogDescription>Fill in the details for the new chapter.</DialogDescription>
