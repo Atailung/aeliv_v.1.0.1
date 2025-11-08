@@ -14,7 +14,6 @@ import  {
 } from "@arcjet/next";
 import arcjet from "@/lib/arcjet"
 import { toNextJsHandler } from "better-auth/next-js";
-import { Import } from "lucide-react";
 import { NextRequest } from "next/server";
 
 // The arcjet instance is created outside of the handler

@@ -1,7 +1,7 @@
 "use server";
 
 import { requireAdmin } from "@/app/data/admin/require-admin";
-import arcjet, { detectBot, fixedWindow } from "@/lib/arcjet";
+import arcjet, { fixedWindow } from "@/lib/arcjet";
 import { prisma } from "@/lib/db";
 import { ApiResponse } from "@/lib/types";
 import { CourseSchema, CourseSchemaType } from "@/lib/ZodSchemas";
@@ -9,12 +9,6 @@ import { request } from "@arcjet/next";
 import { revalidatePath } from "next/cache";
 
 const aj = arcjet
-  .withRule(
-    detectBot({
-      mode: "LIVE",
-      allow: [],
-    })
-  )
   .withRule(
     fixedWindow({
       mode: "LIVE",
@@ -29,17 +23,17 @@ export async function CreateCourse(
   const session = await requireAdmin();
   try {
     // Check authentication
+    const req = await request();
+    const decision = await aj.protect(req, {
+      fingerprint: session.user.id as string,
+    });
 
-    if (!session?.user?.id) {
+     if (!session?.user?.id) {
       return {
         status: "error",
         message: "Unauthorized: Please login to continue",
       };
     }
-    const req = await request();
-    const decision = await aj.protect(req, {
-      fingerprint: session.user.id as string,
-    });
 
     if (decision.isDenied()) {
       if (decision.reason.isRateLimit()) {

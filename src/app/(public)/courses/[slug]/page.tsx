@@ -18,15 +18,17 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Calendar, CheckIcon } from "lucide-react";
-import { formatRelativeTime } from "@/lib/formatRelativeTime";
+import { CheckIcon } from "lucide-react";
+import { checkIfCourseBought } from "@/app/data/user/user-is-enrolled";
+import Link from "next/link";
+import EnrollmentButton from "./_components/EnrollmentButton";
 
 type Params = Promise<{ slug: string }>;
 
 export default async function SlugPage({ params }: { params: Params }) {
   const { slug } = await params;
   const course = await getIndividualCourse(slug);
+  const isEnrolled = await checkIfCourseBought(course.id);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/30">
@@ -222,9 +224,11 @@ export default async function SlugPage({ params }: { params: Params }) {
                     </p>
                   </div>
 
-                  <Button className="w-full h-12 text-base font-semibold rounded-lg">
-                    Enroll Now
-                  </Button>
+                  {isEnrolled ? (
+                    <Link href="/dashboard"> Watch Course</Link>
+                  ) : (
+                    <EnrollmentButton courseId={course.id} />
+                  )}
 
                   <p className="text-xs text-center text-muted-foreground">
                     30-Day Money-Back Guarantee

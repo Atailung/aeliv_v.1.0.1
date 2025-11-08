@@ -5,15 +5,31 @@ import { env } from "./env";
 import { emailOTP } from "better-auth/plugins";
 import { resend } from "./resend";
 
-import { admin } from "better-auth/plugins"
-
-
-
+import { admin } from "better-auth/plugins";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+
+  // Session configuration for better performance
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // 5 minutes cache
+    },
+    updateAge: 24 * 60 * 60, // 24 hours
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+  },
+
+  // Advanced configuration for performance
+  advanced: {
+    generateId: () => crypto.randomUUID(),
+    crossSubDomainCookies: {
+      enabled: false,
+    },
+  },
+
   socialProviders: {
     github: {
       clientId: env.GITHUB_CLIENT_ID,
@@ -23,7 +39,7 @@ export const auth = betterAuth({
 
   plugins: [
     emailOTP({
-      async sendVerificationOTP({ email, otp}) {
+      async sendVerificationOTP({ email, otp }) {
         await resend.emails.send({
           from: "Aeliv <onboarding@resend.dev>",
           to: [email],
@@ -32,6 +48,6 @@ export const auth = betterAuth({
         });
       },
     }),
-    admin()
+    admin(),
   ],
 });
