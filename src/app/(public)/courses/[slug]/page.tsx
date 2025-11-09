@@ -22,6 +22,7 @@ import { CheckIcon } from "lucide-react";
 import { checkIfCourseBought } from "@/app/data/user/user-is-enrolled";
 import Link from "next/link";
 import EnrollmentButton from "./_components/EnrollmentButton";
+import { buttonVariants } from "@/components/ui/button";
 
 type Params = Promise<{ slug: string }>;
 
@@ -192,7 +193,7 @@ export default async function SlugPage({ params }: { params: Params }) {
                                     {lesson.title}
                                   </h4>
                                   <p className="text-xs text-muted-foreground mt-1">
-                                    Lesson {lessonIndex + 1}
+                                    Lessons hora change {lessonIndex + 1}
                                   </p>
                                 </div>
                               </div>
@@ -225,7 +226,7 @@ export default async function SlugPage({ params }: { params: Params }) {
                   </div>
 
                   {isEnrolled ? (
-                    <Link href="/dashboard"> Watch Course</Link>
+                    <Link href="/dashboard" className={buttonVariants({ variant: "outline", className: "w-full" })}> Watch Course</Link>
                   ) : (
                     <EnrollmentButton courseId={course.id} />
                   )}

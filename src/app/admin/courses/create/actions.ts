@@ -3,6 +3,7 @@
 import { requireAdmin } from "@/app/data/admin/require-admin";
 import arcjet, { fixedWindow } from "@/lib/arcjet";
 import { prisma } from "@/lib/db";
+import { stripe } from "@/lib/stripe";
 import { ApiResponse } from "@/lib/types";
 import { CourseSchema, CourseSchemaType } from "@/lib/ZodSchemas";
 import { request } from "@arcjet/next";
@@ -75,6 +76,15 @@ export async function CreateCourse(
       };
     }
 
+
+    const data = await stripe.products.create({
+      name: validation.data.title,
+      description: validation.data.smallDescription,
+      default_price_data: {
+        unit_amount: validation.data.price ? validation.data.price * 100 : 0,
+        currency: "npr",
+      },
+    });
     // Create the course
     const course = await prisma.course.create({
       data: {
@@ -89,6 +99,7 @@ export async function CreateCourse(
         category: validation.data.category,
         status: validation.data.status,
         userId: session.user.id,
+        stripePriceId: data.default_price as string,
       },
     });
 

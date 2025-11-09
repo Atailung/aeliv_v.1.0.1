@@ -23,40 +23,13 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "10mb",
     },
+    turbo: {
+      // optional: enable Turbopack optimizations explicitly
+      rules: {},
+    },
   },
-  // Font optimization and network resilience
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
-  },
-  // Improve build performance
-  webpack: (config, { dev, isServer }) => {
-    if (dev) {
-      // Reduce memory usage in development
-      config.optimization = {
-        ...config.optimization,
-        splitChunks: {
-          chunks: "all",
-          cacheGroups: {
-            default: false,
-            vendors: false,
-            // Vendor chunk
-            vendor: {
-              name: "vendor",
-              chunks: "all",
-              test: /node_modules/,
-              priority: 20,
-            },
-            // Common chunk
-            common: {
-              minChunks: 2,
-              priority: 10,
-              reuseExistingChunk: true,
-            },
-          },
-        },
-      };
-    }
-    return config;
   },
 };
 

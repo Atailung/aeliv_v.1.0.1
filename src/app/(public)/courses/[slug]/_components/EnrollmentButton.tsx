@@ -35,7 +35,7 @@ function EnrollmentButton({ courseId }: { courseId: string }) {
     >
       {isPending ? (
         <>
-          <Loader2 className="animate-spin size-4" /> Loading....
+          <Loader2 className="animate-spin size-4" /> Loading......
         </>
       ) : (
         "Enroll Now"

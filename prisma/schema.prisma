@@ -90,6 +90,7 @@ model Course {
   smallDescription String
   slug             String       @unique
   status           CourseStatus @default(DRAFT)
+  stripePriceId    String      @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

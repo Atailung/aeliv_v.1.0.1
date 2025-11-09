@@ -8,6 +8,7 @@ import { env } from "@/lib/env";
 import { ApiResponse } from "@/lib/types";
 import { request } from "@arcjet/next";
 import { redirect } from "next/navigation";
+import { PAYMENT_SUCCESS_PATH, PAYMENT_CANCEL_PATH } from "@/lib/payment";
 
 const aj = arcjet.withRule(
   slidingWindow({
@@ -161,11 +162,15 @@ export async function enrollInCourseAction(
         },
       ],
       mode: "payment",
-      success_url: `${baseUrl}/payment/success?success=true`,
-      cancel_url: `${baseUrl}/courses/${course.slug}?canceled=true`,
+      // Use centralized path constants so URLs are consistent across the app
+      // Include the Checkout Session ID in the return URL so we can retrieve
+      // the session server-side and read metadata (safer than relying on slug)
+      success_url: `${baseUrl}${PAYMENT_SUCCESS_PATH}?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}${PAYMENT_CANCEL_PATH}?canceled=true`,
       metadata: {
         enrollmentId: enrollmentResult.id,
         courseId: course.id,
+        courseSlug: course.slug,
         userId: user.id,
       },
     });

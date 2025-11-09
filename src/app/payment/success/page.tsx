@@ -1,174 +1,83 @@
-import { CheckCircle2, ArrowRight, BookOpen, Clock, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { getSuccessPageData } from "./action";
-import Link from "next/link";
-import Image from "next/image";
-import { Suspense } from "react";
-import { ConfettiWrapper } from "./confetti-wrapper";
+import { CheckCircle2, ArrowRight } from "lucide-react"
+import { buttonVariants } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import Link from "next/link"
+import { ConfettiWrapper } from "./confetti-wrapper"
 
-interface SearchParams {
-  session_id?: string;
-  course?: string;
-}
-
-// Loading component for better UX
-function SuccessPageSkeleton() {
+export default async function SuccessPage({}) {
   return (
-    <div className="w-full min-h-screen flex flex-1 justify-center items-center">
-      <Card className="w-[400px] animate-pulse">
-        <CardHeader className="text-center">
-          <div className="mx-auto w-16 h-16 bg-muted rounded-full mb-4"></div>
-          <div className="h-6 bg-muted rounded mb-2"></div>
-          <div className="h-4 bg-muted rounded"></div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            <div className="h-4 bg-muted rounded"></div>
-            <div className="h-4 bg-muted rounded w-3/4"></div>
-            <div className="h-10 bg-muted rounded mt-6"></div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-// Optimized success content component
-async function SuccessContent({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) {
-  const resolvedSearchParams = await searchParams;
-  const data = await getSuccessPageData(
-    resolvedSearchParams.session_id,
-    resolvedSearchParams.course
-  );
-
-  if (!data) {
-    // Fallback for unauthenticated users
-    return (
-      <Card className="w-[400px]">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="relative bg-green-500/10 p-4 rounded-full border border-green-500/20">
-              <CheckCircle2 className="w-12 h-12 text-green-600 dark:text-green-400" />
-            </div>
-          </div>
-          <CardTitle className="text-2xl">Payment Successful!</CardTitle>
-          <CardDescription>
-            Thank you for your purchase. You should receive a confirmation email
-            shortly.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-sm text-muted-foreground text-center">
-            Sign in to access your course and start learning immediately.
-          </p>
-          <Button asChild className="w-full">
-            <Link href="/login">
-              Sign In to Access Course
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  const { enrollment, course, user } = data;
-
-  return (
-    <Card className="w-[450px]">
-      <CardHeader className="text-center">
-        <div className="flex justify-center mb-4">
-          <div className="relative bg-green-500/10 p-4 rounded-full border border-green-500/20">
-            <CheckCircle2 className="w-12 h-12 text-green-600 dark:text-green-400" />
-          </div>
-        </div>
-        <CardTitle className="text-2xl">Welcome to Your Course!</CardTitle>
-        <CardDescription>
-          Payment successful. You're all set to start learning.
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent className="space-y-6">
-        {/* Course Info */}
-        <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-          {course.User?.image && (
-            <Image
-              src={course.User.image}
-              alt={course.User.name || "Instructor"}
-              width={40}
-              height={40}
-              className="rounded-full"
-            />
-          )}
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-sm truncate">{course.title}</h3>
-            <p className="text-xs text-muted-foreground">
-              by {course.User?.name}
-            </p>
-            <div className="flex items-center gap-2 mt-1">
-              <Badge variant="secondary" className="text-xs">
-                {course.level}
-              </Badge>
-              <span className="text-xs text-muted-foreground flex items-center gap-1">
-                <Clock className="h-3 w-3" />
-                {course.duration}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 gap-3 text-center">
-          <div className="p-3 bg-muted/30 rounded-lg">
-            <BookOpen className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
-            <p className="text-sm font-medium">{course.totalLessons} Lessons</p>
-          </div>
-          <div className="p-3 bg-muted/30 rounded-lg">
-            <Users className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
-            <p className="text-sm font-medium">Active</p>
-          </div>
-        </div>
-
-        {/* Action Button */}
-        <Button asChild className="w-full" size="lg">
-          <Link href={`/course/${course.slug}`}>
-            Start Learning Now
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Link>
-        </Button>
-
-        <p className="text-xs text-muted-foreground text-center">
-          You can access your course anytime from your dashboard.
-        </p>
-      </CardContent>
-    </Card>
-  );
-}
-
-export default async function SuccessPage({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) {
-  return (
-    <div className="w-full min-h-screen flex flex-1 justify-center items-center bg-gradient-to-br from-background to-muted/20">
+    <div className="w-full min-h-screen flex items-center justify-center bg-background p-4">
       <ConfettiWrapper>
-        <Suspense fallback={<SuccessPageSkeleton />}>
-          <SuccessContent searchParams={searchParams} />
-        </Suspense>
+        <div className="w-full max-w-2xl space-y-8">
+          <div className="text-center space-y-4">
+            <div className="flex justify-center mb-6">
+              <div className="p-4  rounded-full shadow-lg bg-gradient-to-b from-green-400 to-green-600">
+                <CheckCircle2 className="w-16 h-16 text-white" strokeWidth={1.5} />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <h1 className="text-5xl font-bold text-foreground text-balance">You&apos;re all set!</h1>
+              <p className="text-xl text-muted-foreground max-w-xl mx-auto text-balance">
+                Welcome to your learning journey. You&apos;re now enrolled in the course and ready to start.
+              </p>
+            </div>
+          </div>
+
+          <Card className="bg-card/50 border-border/50 backdrop-blur-sm">
+            <CardContent className="pt-8">
+              <div className="space-y-6">
+                {/* Success details */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/10">
+                    <p className="text-sm text-muted-foreground mb-1">Status</p>
+                    <p className="font-semibold text-foreground">Enrolled</p>
+                  </div>
+                  <div className="p-4 bg-accent/5 rounded-lg border border-accent/10">
+                    <p className="text-sm text-muted-foreground mb-1">What&apos;s next</p>
+                    <p className="font-semibold text-foreground">Start learning</p>
+                  </div>
+                </div>
+
+                {/* Action buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                  <Link
+                    href="/dashboard"
+                    className={buttonVariants({
+                      size: "lg",
+                      className: "flex-1 gap-2",
+                    })}
+                  >
+                    Go to Dashboard
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+
+                  <Link
+                    href="/courses"
+                    className={buttonVariants({
+                      variant: "outline",
+                      size: "lg",
+                      className: "flex-1",
+                    })}
+                  >
+                    Explore more courses
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Optional: Quick tips section */}
+          <div className="text-center text-sm text-muted-foreground">
+            <p>
+              Questions? Check our{" "}
+              <Link href="/help" className="underline hover:text-foreground transition-colors">
+                help center
+              </Link>
+            </p>
+          </div>
+        </div>
       </ConfettiWrapper>
     </div>
-  );
+  )
 }
