@@ -11,13 +11,26 @@ import {
   LessonSchema,
   LessonSchemaType,
 } from "@/lib/ZodSchemas";
+<<<<<<< HEAD
 import arcjet, { fixedWindow } from "@/lib/arcjet";
+=======
+import arcjet, { detectBot, fixedWindow } from "@/lib/arcjet";
+>>>>>>> 7e8a464c7637604f40995b8382957d2d19c113c7
 import { ZodError } from "zod/v3";
 import { request } from "@arcjet/next";
 import { revalidatePath } from "next/cache";
 
 const aj = arcjet
   .withRule(
+<<<<<<< HEAD
+=======
+    detectBot({
+      mode: "LIVE",
+      allow: [],
+    })
+  )
+  .withRule(
+>>>>>>> 7e8a464c7637604f40995b8382957d2d19c113c7
     fixedWindow({
       mode: "LIVE",
       max: 5,

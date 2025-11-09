@@ -3,6 +3,7 @@
 import { requireAdmin } from "@/app/data/admin/require-admin";
 import { prisma } from "@/lib/db";
 import { ApiResponse } from "@/lib/types";
+<<<<<<< HEAD
 import arcjet, { fixedWindow } from "@/lib/arcjet";
 import { revalidatePath } from "next/cache";
 import { request } from "@arcjet/next";
@@ -47,6 +48,14 @@ export async function DeleteCourse(courseId: string): Promise<ApiResponse> {
       }
     }
     await prisma.course.delete({
+=======
+import { revalidatePath } from "next/cache";
+
+export async function DeleteCourse(courseId: string):Promise<ApiResponse> {
+    await requireAdmin();
+  try {
+   await prisma.course.delete({
+>>>>>>> 7e8a464c7637604f40995b8382957d2d19c113c7
       where: {
         id: courseId,
       },
@@ -64,4 +73,8 @@ export async function DeleteCourse(courseId: string): Promise<ApiResponse> {
       message: "An error occurred while deleting the course.",
     };
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 7e8a464c7637604f40995b8382957d2d19c113c7
