@@ -32,7 +32,7 @@ export default async function SlugPage({ params }: { params: Params }) {
   const isEnrolled = await checkIfCourseBought(course.id);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/30">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/30 space-y-6 mt-7">
       {/* Hero Section */}
       <div className="relative h-96 w-full overflow-hidden bg-muted">
         <Image

@@ -23,7 +23,7 @@ export default function customImageLoader({
   // For S3 keys or relative paths, construct the full S3 URL
   if (!src.startsWith("/")) {
     // This is likely an S3 key, construct the full URL
-    return `https://aeliv-lms-web-application-v.1.1.t3.storage.dev/${src}`;
+    return `http://aeliv-lms-web-application-v.1.1.t3.storage.dev/${src}`;
   }
 
   // For local images (starting with / or relative paths), use Next.js default optimization

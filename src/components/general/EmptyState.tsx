@@ -11,12 +11,15 @@ interface EmptyStateProps {
   actionLabel?: string
   onAction?: () => void
   icon?: React.ReactNode
+  buttonText?: string
+  href?: string
 }
 
 export default function EmptyState({
   title = "No data yet",
   description = "Start by creating your first course to see it appear here",
   icon,
+  buttonText = "Create Course",
 }: EmptyStateProps) {
   return (
     <div className="mt-32 flex flex-col flex-1 h-full items-center justify-center rounded-lg border border-dashed border-primary p-8 text-center">
@@ -31,10 +34,9 @@ export default function EmptyState({
       {/* Description */}
       <p className="mb-6 max-w-sm text-sm ">{description}</p>
 
-      {/* Action Button */} 
       <Link href="/admin/courses/create" className={buttonVariants({ variant: "default" })}>
         <CirclePlusIcon className="size-4 " />
-        Create your first course
+        {buttonText}
       </Link>
     </div>
   )

@@ -22,10 +22,11 @@ model User {
   enrollments      Enrollment[]
   stripeCustomerId String?      @unique
 
-  role       String?
-  banned     Boolean?  @default(false)
-  banReason  String?
-  banExpires DateTime?
+  role             String?
+  banned           Boolean?         @default(false)
+  banReason        String?
+  banExpires       DateTime?
+  lessonProgresses LessonProgress[]
 
   @@unique([email])
   @@map("user")
@@ -90,7 +91,7 @@ model Course {
   smallDescription String
   slug             String       @unique
   status           CourseStatus @default(DRAFT)
-  stripePriceId    String      @unique
+  stripePriceId    String       @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -138,7 +139,8 @@ model Lesson {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now()) @updatedAt
 
-  Chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  Chapter          Chapter          @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  lessonProgresses LessonProgress[]
 }
 
 model Enrollment {
@@ -161,4 +163,18 @@ enum EnrollmentStatus {
   Pending
   Active
   Canacelled
+}
+
+model LessonProgress {
+  id        String   @id @default(uuid())
+  userId    String
+  lessonId  String
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
 }

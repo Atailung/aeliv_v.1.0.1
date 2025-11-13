@@ -6,20 +6,12 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  BadgeDollarSign,
-  SchoolIcon,
   TimerIcon,
   ArrowRight,
-  Star,
-  Users,
   Calendar,
   Play,
-  BookOpen,
-  Heart,
-  Share2,
   ChartNoAxesColumnIncreasing,
   Award,
-  Coins,
   Landmark,
 } from "lucide-react";
 import Image from "next/image";
@@ -49,7 +41,7 @@ export function PublicCourseCard({ data }: iAppProps) {
   const thumbnailUrl = data.filekey;
 
   return (
-    <Card className="group relative h-full overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer bg-card/60 backdrop-blur-sm hover:bg-card/90 hover:-translate-y-2 hover:scale-[1.02]">
+    <Card className="group relative h-full overflow-hidden border-2  shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer bg-card/60 backdrop-blur-sm hover:bg-card/90 ">
       {/* Course Thumbnail with Enhanced Overlay */}
       <Link href={`/courses/${data.slug}`} className="block relative">
         <div className="relative overflow-hidden bg-muted aspect-video">
@@ -61,19 +53,12 @@ export function PublicCourseCard({ data }: iAppProps) {
             alt={`${data.title} course thumbnail`}
             width={600}
             height={400}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            className="w-full h-full object-cover rounded-b-lg transition-transform duration-700"
             priority={false}
           />
 
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-          {/* Play Button Overlay */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform scale-75 group-hover:scale-100">
-            <div className="bg-primary/90 backdrop-blur-sm rounded-full p-4 shadow-2xl hover:bg-primary transition-colors duration-300">
-              <Play className="h-8 w-8 text-primary-foreground fill-current" />
-            </div>
-          </div>
+          <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
           {/* Level Badge */}
           <div className="absolute top-4 right-4 z-10">
@@ -114,9 +99,11 @@ export function PublicCourseCard({ data }: iAppProps) {
               {data.category}
             </Badge>
           </div>
-            <Separator className="my-8" />
-            <h2 className="text-3xl font-semibold tracking-tight">Course Description</h2>
-          <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+          <Separator className="my-8" />
+          <h2 className="text-xl font-semibold tracking-tight">
+            Course Description
+          </h2>
+          <p className="text-sm text-muted-foreground  leading-relaxed line-clamp-3 truncate">
             {data.smallDescription}
           </p>
         </div>

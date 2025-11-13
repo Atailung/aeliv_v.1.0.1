@@ -44,7 +44,7 @@ export function AdminCoursesCard({ data }: iAppProps) {
     const thumbnailUrl = useConstructUrl(data.filekey);
 
     return (
-        <Card className="group relative overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-card/50 backdrop-blur-sm hover:bg-card/80">
+        <Card className="group relative overflow-hidden border-1 shadow-md hover:shadow-xl transition-all duration-300 bg-card/50 backdrop-blur-sm hover:bg-card/80 border-border/50">
             {/* Status Badge */}
             <Badge 
               className={cn(
