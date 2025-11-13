@@ -12,7 +12,8 @@
     "clean:cache": "pnpm store prune && pnpm cache clear",
     "deps:update": "pnpm update --latest",
     "clean:node_modules": "rimraf node_modules && pnpm install",
-    "check:health": "pnpm store status && pnpm audit"
+    "check:health": "pnpm store status && pnpm audit",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@arcjet/inspect": "1.0.0-beta.10",
