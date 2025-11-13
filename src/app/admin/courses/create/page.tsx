@@ -76,7 +76,7 @@ function CreateCoursesPage() {
       duration: 1,
       price: 0,
       level: "BEGINNER",
-      category: "WEB_DEVELOPMENT",
+      category: "Web_development",
       smallDescription: "",
       status: "DRAFT",
     },

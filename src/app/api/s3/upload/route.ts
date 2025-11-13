@@ -4,27 +4,24 @@ import z from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import arcjet, { fixedWindow } from "@/lib/arcjet";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { requireAdmin } from "@/app/data/admin/require-admin";
 import { S3 } from "@/lib/S3Client";
 import { env } from "@/lib/env";
 
-export const fileUploadSchema = z.object({
+const fileUploadSchema = z.object({
   fileName: z.string().min(1, { message: "File name is required" }),
   contentType: z.string().min(1, { message: "Content type is required" }),
   size: z.number().min(1, { message: "File size is required" }),
   isImage: z.boolean(),
 });
 
-const aj = arcjet
-  .withRule(
-    fixedWindow({
-      mode: "LIVE",
-      max: 2,
-      window: "1m",
-    })
-  );
+const aj = arcjet.withRule(
+  fixedWindow({
+    mode: "LIVE",
+    max: 2,
+    window: "1m",
+  })
+);
 
 export async function POST(request: Request) {
   const session = await requireAdmin();

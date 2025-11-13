@@ -1,10 +1,8 @@
 import { prisma } from "@/lib/db";
-import { FileKey } from "lucide-react";
 import "server-only";
-import { id } from "zod/v4/locales";
 import { requireUser } from "./require-user";
 
-export async function getEnrolledCourses(userId: string) {
+export async function getEnrolledCourses() {
   const user = await requireUser();
   const data = await prisma.enrollment.findMany({
     where: {

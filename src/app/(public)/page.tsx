@@ -55,7 +55,7 @@ export default function Homepage() {
               The Future of online Education
             </Badge>
             <h1 className='text-4xl font-bold md:text-6xl tracking-tight'>Elevate Your Learning Experience</h1>
-            <p className='max-w-[700px] text-muted-foreground '>Join our platform to access a world of knowledge, connect with expert instructors, and unlock your full potential. Whether you're looking to acquire new skills, advance your career, or explore new hobbies, we have the courses and resources to help you succeed.</p>
+            <p className='max-w-[700px] text-muted-foreground '>Join our platform to access a world of knowledge, connect with expert instructors, and unlock your full potential. Whether you&apos;re looking to acquire new skills, advance your career, or explore new hobbies, we have the courses and resources to help you succeed.</p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-8">
                 <Link href="/courses" className={buttonVariants({size: "lg"})}>

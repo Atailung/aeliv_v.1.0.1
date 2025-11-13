@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { tryCatch } from "@/hooks/try-catch";
 import { useConfetti } from "@/hooks/use-confetti";
 import { BookIcon, CheckCircle } from "lucide-react";
-import React, { use, useTransition } from "react";
+import React, { useTransition } from "react";
 import { toast } from "sonner";
 import { markLessonComplete } from "../action";
 import { useConstructUrl } from "@/hooks/use-construct";
@@ -89,7 +89,11 @@ function CourseContent({ data }: iAppProps) {
       />
       <div className="py-4 border-b">
         {data.lessonProgresses.length > 0 ? (
-          <Button variant="outline" className="mt-4 mb-4 bg-green-500/10 text-green-500 hover:bg-green-500" disabled>
+          <Button
+            variant="outline"
+            className="mt-4 mb-4 bg-green-500/10 text-green-500 hover:bg-green-500"
+            disabled
+          >
             <CheckCircle className="size-4 mr-2 text-green-500" />
             Completed
           </Button>

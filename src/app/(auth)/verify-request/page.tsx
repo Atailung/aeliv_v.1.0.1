@@ -16,11 +16,11 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { Loader } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState, useTransition } from "react";
+import React, { useState, useTransition, Suspense } from "react";
 import { toast } from "sonner";
 
-export default function Verification() {
-  const [otp, setOtp] = useState(""); 
+function VerificationContent() {
+  const [otp, setOtp] = useState("");
   const params = useSearchParams();
   const email = params.get("email");
   const router = useRouter();
@@ -122,5 +122,19 @@ export default function Verification() {
         </Button>
       </CardFooter>
     </Card>
+  );
+}
+
+export default function Verification() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader className="animate-spin h-8 w-8" />
+        </div>
+      }
+    >
+      <VerificationContent />
+    </Suspense>
   );
 }

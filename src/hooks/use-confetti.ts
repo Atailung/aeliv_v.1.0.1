@@ -4,8 +4,8 @@ import confetti from "canvas-confetti";
 
 export const useConfetti = () => {
   const triggerConfetti = () => {
-    var count = 200;
-    var defaults = {
+    const count = 200;
+    const defaults = {
       origin: { y: 0.7 },
     };
 
@@ -40,8 +40,6 @@ export const useConfetti = () => {
       startVelocity: 45,
     });
   };
-
-
 
   return { triggerConfetti };
 };

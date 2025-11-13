@@ -7,18 +7,16 @@ import arcjet, { fixedWindow } from "@/lib/arcjet";
 import { revalidatePath } from "next/cache";
 import { request } from "@arcjet/next";
 
-const aj = arcjet
-  .withRule(
-    fixedWindow({
-      mode: "LIVE",
-      max: 5,
-      window: "1m",
-    })
-  );
+const aj = arcjet.withRule(
+  fixedWindow({
+    mode: "LIVE",
+    max: 5,
+    window: "1m",
+  })
+);
 
 export async function DeleteCourse(courseId: string): Promise<ApiResponse> {
   const session = await requireAdmin();
-  ;
   try {
     const req = await request();
     const decision = await aj.protect(req, {
@@ -58,7 +56,7 @@ export async function DeleteCourse(courseId: string): Promise<ApiResponse> {
       status: "success",
       message: "Course deleted successfully.",
     };
-  } catch (error) {
+  } catch {
     return {
       status: "error",
       message: "An error occurred while deleting the course.",

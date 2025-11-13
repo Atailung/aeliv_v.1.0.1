@@ -3,8 +3,36 @@
 import { authClient } from "@/lib/auth-client";
 import { createContext, useContext, ReactNode, useMemo } from "react";
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  emailVerified: boolean;
+  image?: string | null;
+  role?: string | null;
+  banned?: boolean | null;
+  banReason?: string | null;
+  banExpires?: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface Session {
+  session: {
+    id: string;
+    userId: string;
+    expiresAt: Date;
+    token: string;
+    ipAddress?: string | null;
+    userAgent?: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  user: User;
+}
+
 interface SessionContextType {
-  data: any;
+  data: Session | null;
   isPending: boolean;
   isLoading: boolean;
 }

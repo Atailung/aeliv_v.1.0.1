@@ -3,9 +3,14 @@
 import { authClient } from "@/lib/auth-client";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+interface SessionData {
+  session: unknown;
+  user: unknown;
+}
+
 // Create a shared session cache
 const sessionCache = {
-  data: null as any,
+  data: null as SessionData | null,
   timestamp: 0,
   isLoading: false,
   listeners: new Set<() => void>(),
@@ -26,7 +31,7 @@ const sessionCache = {
     return Date.now() - this.timestamp > this.CACHE_DURATION;
   },
 
-  setData(data: any) {
+  setData(data: SessionData | null) {
     this.data = data;
     this.timestamp = Date.now();
     this.isLoading = false;
@@ -47,7 +52,7 @@ const sessionCache = {
  */
 export function useOptimizedSession() {
   const { data: authData, isPending: authPending } = authClient.useSession();
-  const lastCallRef = useRef<Promise<any> | null>(null);
+  const lastCallRef = useRef<Promise<SessionData | null> | null>(null);
 
   // Force re-render when cache updates
   const [, forceUpdate] = useState(0);
@@ -77,7 +82,7 @@ export function useOptimizedSession() {
     sessionCache.setLoading(true);
 
     // Create new request
-    const promise = new Promise((resolve) => {
+    const promise = new Promise<SessionData | null>((resolve) => {
       // Wait for better-auth's useSession to complete
       const checkAuth = () => {
         if (!authPending && authData !== undefined) {

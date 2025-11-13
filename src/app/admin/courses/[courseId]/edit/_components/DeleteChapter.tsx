@@ -1,6 +1,5 @@
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -67,7 +66,14 @@ export default function DeleteChapter({
             onClick={handleDelete}
             disabled={isDeleting}
           >
-            {isDeleting ? "Deleting..." : <> <Trash2 className="size-4 text-red-600" /> Delete</>}
+            {isDeleting ? (
+              "Deleting..."
+            ) : (
+              <>
+                {" "}
+                <Trash2 className="size-4 text-red-600" /> Delete
+              </>
+            )}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

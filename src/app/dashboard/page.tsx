@@ -5,8 +5,7 @@ import EmptyState from "@/components/general/EmptyState";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { PublicCourseCard } from "../(public)/_components/PublicCourseCard";
-import { BookOpen, Sparkles } from "lucide-react";
-import Link from "next/link";
+import { Sparkles } from "lucide-react";
 import { CourseProgressCard } from "./_compontents/CourseProgressCard";
 async function dashboardUserPage() {
   const session = await auth.api.getSession({
@@ -20,7 +19,7 @@ async function dashboardUserPage() {
 
   const [courses, enrolledCourses] = await Promise.all([
     getAllCourses(),
-    getEnrolledCourses(userId),
+    getEnrolledCourses(),
   ]);
 
   const availableCourses = courses.filter(
@@ -44,7 +43,6 @@ async function dashboardUserPage() {
                       enrolledCourses.length !== 1 ? "s" : ""
                     } in progress`}
               </p>
-
             </div>
           </div>
 

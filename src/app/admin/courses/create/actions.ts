@@ -9,14 +9,13 @@ import { CourseSchema, CourseSchemaType } from "@/lib/ZodSchemas";
 import { request } from "@arcjet/next";
 import { revalidatePath } from "next/cache";
 
-const aj = arcjet
-  .withRule(
-    fixedWindow({
-      mode: "LIVE",
-      max: 5,
-      window: "1m",
-    })
-  );
+const aj = arcjet.withRule(
+  fixedWindow({
+    mode: "LIVE",
+    max: 5,
+    window: "1m",
+  })
+);
 
 export async function CreateCourse(
   values: CourseSchemaType
@@ -29,7 +28,7 @@ export async function CreateCourse(
       fingerprint: session.user.id as string,
     });
 
-     if (!session?.user?.id) {
+    if (!session?.user?.id) {
       return {
         status: "error",
         message: "Unauthorized: Please login to continue",
@@ -59,7 +58,7 @@ export async function CreateCourse(
         status: "error",
         message:
           "Validation failed: " +
-          validation.error.issues.map((issue: any) => issue.message).join(", "),
+          validation.error.issues.map((issue) => issue.message).join(", "),
       };
     }
 
@@ -75,7 +74,6 @@ export async function CreateCourse(
           "A course with this slug already exists. Please use a different slug.",
       };
     }
-
 
     const data = await stripe.products.create({
       name: validation.data.title,

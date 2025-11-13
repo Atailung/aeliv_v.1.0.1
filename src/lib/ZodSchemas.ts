@@ -1,26 +1,24 @@
-import { description } from "@/components/sidebar/chart-area-interactive";
 import { z } from "zod";
-import { th } from "zod/v4/locales";
 
 export const CourseLevels = ["BEGINNER", "INTERMEDIATE", "ADVANCED"] as const;
 
 export const CourseStatus = ["DRAFT", "PUBLISHED", "ARCHIVED"] as const;
 
 export const CourseCategories = [
-  "WEB_DEVELOPMENT",
-  "DATA_SCIENCE",
-  "MOBILE_DEVELOPMENT",
-  "AI",
-  "CLOUD_COMPUTING",
-  "DEVOPS",
-  "TECHING & ACADEMICS",
-  "IT & SOFTWARE",
-  "DESIGN",
-  "MARKETING",
-  "HEALTH",
-  "FINANCE",
-  "MUSIC",
-  "PERSONAL_DEVELOPMENT",
+  "Web_development",
+  "Data_science",
+  "Mobile_development",
+  "Ai",
+  "Cloud_computing",
+  "Devops",
+  "Teaching_&_academics",
+  "It_&_software",
+  "Design",
+  "Marketing",
+  "Health",
+  "Finance",
+  "Music",
+  "Personal_development",
 ] as const;
 
 export const CourseSchema = z.object({
@@ -61,11 +59,7 @@ export const CourseSchema = z.object({
       message: "Small description must be at most 200 characters long",
     }),
   status: z.enum(CourseStatus),
-  // User: z.string().min(3, { message: 'User must be at least 3 characters long' }).max(100, { message: 'User must be at most 100 characters long' }),
-  // userId: z.string().min(3, { message: 'User ID must be at least 3 characters long' }).max(100, { message: 'User ID must be at most 100 characters long' }),
-  // instructor: z.string().min(2, { message: 'Instructor must be at least 2 characters long' }).max(100, { message: 'Instructor must be at most 100 characters long' }),
-  // createdAt: z.date().default(() => new Date()),
-  // updatedAt: z.date().default(() => new Date()),
+ 
 });
 
 export type CourseSchemaType = z.infer<typeof CourseSchema>;

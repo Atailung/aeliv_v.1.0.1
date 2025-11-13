@@ -1,7 +1,6 @@
-
 import { auth } from "@/lib/auth";
 import ip from "@arcjet/ip";
-import  {
+import {
   type ArcjetDecision,
   type BotOptions,
   type EmailOptions,
@@ -9,10 +8,9 @@ import  {
   type SlidingWindowRateLimitOptions,
   detectBot,
   protectSignup,
-  shield,
   slidingWindow,
 } from "@arcjet/next";
-import arcjet from "@/lib/arcjet"
+import arcjet from "@/lib/arcjet";
 import { toNextJsHandler } from "better-auth/next-js";
 import { NextRequest } from "next/server";
 
@@ -73,7 +71,7 @@ async function protect(req: NextRequest): Promise<ArcjetDecision> {
     if (typeof body.email === "string") {
       return arcjet
         .withRule(protectSignup(signupOptions))
-        .protect(req, { email: body.email,  fingerprint: userId });
+        .protect(req, { email: body.email, fingerprint: userId });
     } else {
       // Otherwise use rate limit and detect bot
       return arcjet
@@ -83,7 +81,9 @@ async function protect(req: NextRequest): Promise<ArcjetDecision> {
     }
   } else {
     // For all other auth requests
-    return arcjet.withRule(detectBot(botOptions)).protect(req, { fingerprint: userId });
+    return arcjet
+      .withRule(detectBot(botOptions))
+      .protect(req, { fingerprint: userId });
   }
 }
 
