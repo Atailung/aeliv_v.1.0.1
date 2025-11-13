@@ -5,6 +5,7 @@ import {
   PublicCourseCardSkeleton,
 } from "../_components/PublicCourseCard";
 
+export const dynamic = "force-dynamic";
 function PublicCoursesRoute() {
   return (
     <div className="container mt-10">
