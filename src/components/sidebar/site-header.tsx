@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "../ui/ThemeToggle";
+import UserPontCounts from "@/app/dashboard/quizzes/_components/UserPontCounts";
 
 export function SiteHeader() {
   return (
@@ -15,6 +16,7 @@ export function SiteHeader() {
         <div className="ml-auto flex items-center gap-2">
           <ThemeToggle />
         </div>
+        <UserPontCounts />
       </div>
     </header>
   );

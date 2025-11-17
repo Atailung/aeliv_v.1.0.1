@@ -6,6 +6,7 @@ import {
 import { ReactNode } from "react"
 import { requireUser } from "../data/user/require-user"
 import { AppSidebar } from "./_compontents/DashboardAppSidebar";
+import { QuizProvider } from "./quizzes/[id]/context/context-quiz-provider";
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   // This will handle authentication and authorization
@@ -21,6 +22,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
         } as React.CSSProperties
       }
     >
+      <QuizProvider>
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
@@ -32,6 +34,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
           </div>
         </div>
       </SidebarInset>
+      </QuizProvider>
     </SidebarProvider>
   )
 }

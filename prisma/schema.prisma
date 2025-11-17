@@ -27,6 +27,7 @@ model User {
   banReason        String?
   banExpires       DateTime?
   lessonProgresses LessonProgress[]
+  quizAttempts     QuizAttempt[]
 
   @@unique([email])
   @@map("user")
@@ -115,6 +116,43 @@ enum CourseStatus {
   ARCHIVED
 }
 
+enum CourseCategory {
+  // Tech Learning (your original)
+  WEB_DEVELOPMENT
+  DATA_SCIENCE
+  MOBILE_DEVELOPMENT
+  PROGRAMMING_LANGUAGES
+  GAME_DEVELOPMENT
+  SOFTWARE_DEVELOPMENT
+  DEVOPS
+  CYBER_SECURITY
+  CLOUD_COMPUTING
+  AI_AND_MACHINE_LEARNING
+  DATABASES
+
+  // Nepal Top Entrance Exams
+  CEE_MEDICAL // MBBS/BDS/PA/Pharmacy/Nursing entrance by MEC
+  IOE_ENGINEERING // TU Institute of Engineering entrance
+  IOM_MEDICAL // TU Institute of Medicine entrance
+  KU_ENGINEERING // Kathmandu University engineering entrance
+  KU_MEDICAL // Kathmandu University MBBS/BDS entrance
+  BSc_AGRICULTURE // AFU/PU Agriculture entrance
+  BSc_NURSING // Nursing council/University entrance
+  BBA_ENTRANCE // TU/KU/PU BBA & Management entrance
+  CSIT_ENTRANCE // BSc CSIT entrance (TU)
+  LAW_ENTRANCE // BALLB/LLB entrances
+  CA_CAP1 // Chartered Accountant CAP I
+  CA_CAP2 // Chartered Accountant CAP II
+  CA_CAP3 // Chartered Accountant CAP III
+  A_LEVELS
+  PLUS_TWO_SCIENCE
+  BANKING_PREPARATION
+  GOVERNMENT_EXAMS // Loksewa, Section Officer, etc.
+  ARMY_POLICE_SECURITY // Nepal Army/Police/APF exams
+
+  OTHER
+}
+
 model Chapter {
   id        String   @id @default(uuid())
   title     String
@@ -136,11 +174,13 @@ model Lesson {
   videoKey     String?
   courseId     String
   chapterId    String
+  lessonId     String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now()) @updatedAt
 
   Chapter          Chapter          @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   lessonProgresses LessonProgress[]
+  quizzes          Quiz[]
 }
 
 model Enrollment {
@@ -177,4 +217,87 @@ model LessonProgress {
   Lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
   @@unique([userId, lessonId])
+}
+
+enum Quizlevel {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model Quiz {
+  id          String         @id @default(uuid())
+  title       String
+  description String?
+  slug        String         @unique
+  imageUrl    String?
+  timeLimit   Int? // in seconds
+  totalPoints Int            @default(0)
+  lessonId    String?
+  level       Quizlevel      @default(EASY)
+  category    CourseCategory @default(WEB_DEVELOPMENT)
+
+  lesson    Lesson?       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  questions Question[]
+  attempts  QuizAttempt[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Question {
+  id     String @id @default(uuid())
+  quizId String
+  quiz   Quiz   @relation(fields: [quizId], references: [id])
+
+  text     String
+  imageUrl String?
+  points   Int     @default(1)
+  order    Int // question number
+
+  options Option[]
+}
+
+model Option {
+  id         String   @id @default(uuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  text      String
+  isCorrect Boolean @default(false)
+}
+
+model QuizAttempt {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizId String
+  quiz   Quiz   @relation(fields: [quizId], references: [id])
+
+  score     Int       @default(0)
+  startedAt DateTime  @default(now())
+  endedAt   DateTime?
+
+  // Progress tracking
+  answers UserAnswer[]
+
+  // Status 
+  status AttemptStatus @default(InProgress)
+}
+
+model UserAnswer {
+  id        String      @id @default(uuid())
+  attemptId String
+  attempt   QuizAttempt @relation(fields: [attemptId], references: [id])
+
+  questionId String
+  selectedId String? // option selected by user
+  isCorrect  Boolean  @default(false)
+  answeredAt DateTime @default(now())
+}
+
+enum AttemptStatus {
+  InProgress
+  Completed
+  Failed
 }
