@@ -44,8 +44,8 @@ const data = {
       icon: IconListDetails,
     },
     {
-      title: "Analytics",
-      url: "/admin/analytics",
+      title: "Quizzes",
+      url: "/admin/quizzes",
       icon: IconChartBar,
     },
     {
