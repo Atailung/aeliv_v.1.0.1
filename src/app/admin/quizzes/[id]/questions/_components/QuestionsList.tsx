@@ -9,8 +9,6 @@ import {
   Circle,
   AlertCircle,
   List,
-  Loader2,
-  Pencil,
   Image as ImageIcon,
 } from "lucide-react";
 import Image from "next/image";
@@ -36,14 +34,17 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useConstructUrl } from "@/hooks/use-construct";
+import { useConstructUrl as constructUrl } from "@/hooks/use-construct";
 
 interface QuestionsListProps {
   questions: AdminQuizSingularType["questions"];
   quizId: string;
 }
 
-export function QuestionsList({ questions, quizId }: QuestionsListProps) {
+export function QuestionsList({
+  questions,
+  quizId: _quizId,
+}: QuestionsListProps) {
   const router = useRouter();
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -74,7 +75,8 @@ export function QuestionsList({ questions, quizId }: QuestionsListProps) {
       <Card>
         <CardContent className="flex flex-col items-center justify-center py-16">
           <p className="text-muted-foreground text-center">
-            No questions added yet. Click "Add Question" to get started.
+            No questions added yet. Click &quot;Add Question&quot; to get
+            started.
           </p>
         </CardContent>
       </Card>
@@ -149,7 +151,7 @@ export function QuestionsList({ questions, quizId }: QuestionsListProps) {
                 </h4>
                 <div className="relative w-full max-w-md h-48 rounded-lg overflow-hidden border bg-muted/50">
                   <Image
-                    src={useConstructUrl(question.imageUrl)}
+                    src={constructUrl(question.imageUrl)}
                     alt="Question illustration"
                     fill
                     className="object-contain"

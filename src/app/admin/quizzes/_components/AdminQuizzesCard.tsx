@@ -26,14 +26,14 @@ import {
   FileQuestion,
 } from "lucide-react";
 import Link from "next/link";
-import { useConstructUrl } from "@/hooks/use-construct";
+import { useConstructUrl as constructUrl } from "@/hooks/use-construct";
 
 interface AdminQuizzesCardProps {
   data: AdminQuizzesType;
 }
 
 export function AdminQuizzesCard({ data }: AdminQuizzesCardProps) {
-  const imageUrl = data.imageUrl ? useConstructUrl(data.imageUrl) : null;
+  const imageUrl = data.imageUrl ? constructUrl(data.imageUrl) : null;
   const level = data.level || "Uncategorized";
   const category = data.category;
   const completedAttempts = data._count.attempts || 0;

@@ -46,6 +46,14 @@ export async function editQuiz(
     const validatedData = updateQuizSchema.parse(data);
     const { id, slug, ...rest } = validatedData;
 
+    // Convert null values to undefined for Prisma
+    const updateData = Object.fromEntries(
+      Object.entries(rest).map(([key, value]) => [
+        key,
+        value === null ? undefined : value,
+      ])
+    );
+
     // Check if slug is being updated and if it's already taken
     if (slug) {
       const existingQuiz = await prisma.quiz.findFirst({
@@ -67,7 +75,7 @@ export async function editQuiz(
     await prisma.quiz.update({
       where: { id },
       data: {
-        ...rest,
+        ...updateData,
         ...(slug && { slug }),
       },
       select: {

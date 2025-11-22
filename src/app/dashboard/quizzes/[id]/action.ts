@@ -108,7 +108,11 @@ export async function userSubmitQuiz(
     let earned = 0;
     const totalPoints =
       quiz.totalPoints || quiz.questions.reduce((sum, q) => sum + q.points, 0);
-    const userAnswers: any[] = [];
+    const userAnswers: Array<{
+      questionId: string;
+      selectedId: string | null;
+      isCorrect: boolean;
+    }> = [];
 
     for (const question of quiz.questions) {
       const userAnswer = answers[question.id];

@@ -134,8 +134,8 @@ export async function updateQuestion(
       };
     }
 
-    const { quizId, options, ...updateData } = input;
-    
+    const { quizId: _quizId, options: _options, ...updateData } = input;
+
     const question = await prisma.question.update({
       where: { id },
       data: updateData,

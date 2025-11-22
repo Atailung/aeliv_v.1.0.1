@@ -1,7 +1,5 @@
 import React from "react";
-import ProgressBar from "./ProgressBar";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Clock, AlertCircle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
@@ -31,7 +29,7 @@ function QuizHeader({
   const isTimeRunningOut = timeLeft !== null && timeLeft < 60; // Less than 1 minute
 
   return (
-    <Card className="p-6">
+    <Card className=" sticky top-6 space-y-4 p-6">
       <div className="space-y-4">
         {/* Quiz Title and Progress */}
         <div className="flex items-start justify-between gap-4">

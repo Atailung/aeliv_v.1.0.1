@@ -11,7 +11,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { PanelLeftOpen } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import CurrentQuizzes from "./_components/CurrentQuizzes";
 import AllQuizzes from "./_components/AllQuizzes";
 import RightSideBar from "./_components/RightSideBar";
@@ -20,10 +20,51 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  getPublicQuizzes,
+  PublicQuizType,
+} from "@/app/data/quiz/get-public-quizzes";
+import { getUserQuizzes, UserQuizType } from "@/app/data/quiz/get-user-quizzes";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 function Quizzes() {
   const [isSelectedTab, setIsSelectedTab] = useState("completed");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [quizzes, setQuizzes] = useState<PublicQuizType[]>([]);
+  const [userQuizzes, setUserQuizzes] = useState<UserQuizType[]>([]);
+
+  const [loading, setLoading] = useState(true);
+
+  // Calculate quiz counts for each difficulty
+  const quizCounts = useMemo(() => {
+    const counts = {
+      completed: userQuizzes.length,
+      all: quizzes.length,
+      easy: quizzes.filter((quiz) => quiz.level === "EASY").length,
+      medium: quizzes.filter((quiz) => quiz.level === "MEDIUM").length,
+      hard: quizzes.filter((quiz) => quiz.level === "HARD").length,
+    };
+    return counts;
+  }, [quizzes, userQuizzes]);
+
+  useEffect(() => {
+    async function fetchQuizzes() {
+      try {
+        const [publicData, userData] = await Promise.all([
+          getPublicQuizzes(),
+          getUserQuizzes(),
+        ]);
+        console.log("Fetched quizzes:", publicData);
+        setQuizzes(publicData);
+        setUserQuizzes(userData);
+      } catch (error) {
+        console.error("Failed to fetch quizzes:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchQuizzes();
+  }, []);
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
@@ -52,7 +93,7 @@ function Quizzes() {
                     }
                     className="text-xs"
                   >
-                    0
+                    {quizCounts.completed}
                   </Badge>
                 </TabsTrigger>
                 <TabsTrigger
@@ -66,7 +107,7 @@ function Quizzes() {
                     variant={isSelectedTab === "all" ? "default" : "secondary"}
                     className="text-xs"
                   >
-                    0
+                    {quizCounts.all}
                   </Badge>
                 </TabsTrigger>
               </TabsList>
@@ -96,9 +137,9 @@ function Quizzes() {
                   <SheetHeader className="p-4 border-b">
                     <SheetTitle>Quiz Info</SheetTitle>
                   </SheetHeader>
-                  <div className="p-4">
-                    <RightSideBar />
-                  </div>
+                  <ScrollArea className="h-full w-fullrounded-md border p-2">
+                    <RightSideBar quizzes={quizzes} />
+                  </ScrollArea>
                 </SheetContent>
               </Sheet>
             </div>
@@ -108,14 +149,20 @@ function Quizzes() {
               <CurrentQuizzes />
             </TabsContent>
             <TabsContent value="all" className="mt-4">
-              <AllQuizzes />
+              {loading ? (
+                <div className="p-4 text-center text-muted-foreground">
+                  Loading quizzes...
+                </div>
+              ) : (
+                <AllQuizzes quizzes={quizzes} />
+              )}
             </TabsContent>
           </Tabs>
         </div>
 
         {/* Desktop Sidebar */}
         <aside className="hidden lg:block lg:w-1/4">
-          <RightSideBar />
+          <RightSideBar quizzes={quizzes} />
         </aside>
       </div>
     </div>

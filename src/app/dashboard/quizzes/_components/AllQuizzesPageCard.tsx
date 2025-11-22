@@ -1,68 +1,55 @@
-import { Gauge } from "lucide-react";
 import React from "react";
+import { PublicQuizType } from "@/app/data/quiz/get-public-quizzes";
 import SingalQuizCard from "./SingalQuizCard";
 
-// Reusable Difficulty Section
-function DifficultySection({ difficulty, category }: { difficulty: string; category: string }) {
-  const switchColor = (diff: string) => {
-    switch (diff.toLowerCase()) {
-      case "beginner":
-        return "text-green-700 dark:text-green-400";
-      case "intermediate":
-        return "text-yellow-700 dark:text-yellow-400";
-      case "advanced":
-        return "text-red-700 dark:text-red-400";
-      default:
-        return "text-gray-700 dark:text-gray-400";
-    }
-  };
-
-  return (
-    <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 text-sm">
-      <div className="flex items-center gap-1.5">
-        <Gauge className={`w-5 h-5 ${switchColor(difficulty)}`} />
-        <h3 className="text-base sm:text-lg font-semibold text-foreground">Difficulty:</h3>
-      </div>
-      <span className={`font-medium capitalize ${switchColor(difficulty)}`}>
-        {difficulty}
-      </span>
-    </div>
-  );
-}
-
 // Reusable Quiz Grid
-function QuizGrid() {
+function QuizGrid({ quizzes }: { quizzes: PublicQuizType[] }) {
   return (
-    <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 p-2 sm:p-3 mt-5">
-      {[1, 2, 3].map((i) => (
-        <SingalQuizCard key={i} />
-      ))}
+    <div className="grid lg:grid-cols-2 gap-4   space-y-2 mt-5">
+      {quizzes
+        .filter((quiz) => quiz && quiz.id)
+        .map((quiz) => (
+          <SingalQuizCard key={quiz.id} quiz={quiz} />
+        ))}
     </div>
   );
 }
 
-function AllQuizzesPageCard({ category }: { category: string }) {
+function AllQuizzesPageCard({
+  difficulty,
+  quizzes,
+}: {
+  difficulty: string;
+  quizzes: PublicQuizType[];
+}) {
+  const filteredQuizzes =
+    difficulty === "ALL"
+      ? quizzes.filter((quiz) => quiz && quiz.id)
+      : quizzes.filter((quiz) => quiz && quiz.level === difficulty);
+
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       {/* Header */}
       <header className="mb-6">
         <h2 className="text-xl sm:text-2xl font-bold text-foreground">
-          Explore {category} Quizzes
+          Explore {difficulty === "ALL" ? "All" : difficulty} Quizzes
         </h2>
         <p className="mt-1 text-sm sm:text-base text-muted-foreground">
-          Test your {category} knowledge with these quizzes. Challenge yourself and improve your skills! 
+          {difficulty === "ALL"
+            ? "Test your knowledge with quizzes of all difficulty levels. Challenge yourself and improve your skills!"
+            : `Test your knowledge with these ${difficulty.toLowerCase()} quizzes. Challenge yourself and improve your skills!`}
         </p>
       </header>
 
-      {/* Difficulty Sections */}
-      <DifficultySection difficulty="Beginner" category={category} />
-      <QuizGrid />
-
-      <DifficultySection difficulty="Intermediate" category={category} />
-      <QuizGrid />
-
-      <DifficultySection difficulty="Advanced" category={category} />
-      <QuizGrid />
+      {/* Quiz Grid */}
+      {filteredQuizzes.length === 0 ? (
+        <div className="text-center py-8 text-muted-foreground">
+          No {difficulty === "ALL" ? "" : difficulty.toLowerCase() + " "}quizzes
+          available yet.
+        </div>
+      ) : (
+        <QuizGrid quizzes={filteredQuizzes} />
+      )}
     </div>
   );
 }

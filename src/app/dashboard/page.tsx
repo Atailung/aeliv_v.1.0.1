@@ -1,3 +1,4 @@
+
 import React from "react";
 import { getAllCourses } from "../data/course/get-all-courses";
 import { getEnrolledCourses } from "../data/user/get-enrolled-courses";
@@ -7,6 +8,8 @@ import { headers } from "next/headers";
 import { PublicCourseCard } from "../(public)/_components/PublicCourseCard";
 import { Sparkles } from "lucide-react";
 import { CourseProgressCard } from "./_compontents/CourseProgressCard";
+import DashboardQuizCard from "./_compontents/DashboardQuizCard";
+
 async function dashboardUserPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -26,14 +29,20 @@ async function dashboardUserPage() {
     (course) =>
       !enrolledCourses.some(({ Course: enrolled }) => enrolled.id === course.id)
   );
+  
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Enrolled Courses Section */}
         <section className="mb-16">
+          <div>
+            <div className="grid space-y-6 gap-6">
+             <DashboardQuizCard  />
+            </div>
+          </div>
           <div className="mb-6 flex items-baseline justify-between">
-            <div>
-              <h2 className="text-2xl font-bold text-foreground">
+            <div className="mt-6">
+              <h2 className="  text-2xl font-bold text-foreground">
                 Enrolled Courses
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">

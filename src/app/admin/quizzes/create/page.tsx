@@ -10,8 +10,6 @@ import {
 } from "@/components/ui/card";
 import {
   CourseCategories,
-  CourseSchema,
-  CourseSchemaType,
   DifficultyLevelsOfQuiz,
   QuizSchema,
   QuizSchemaType,
@@ -71,8 +69,6 @@ function CreateQuizPage() {
       category: "Web_development",
     },
   });
-
-    
 
   // Fetch lessons on mount
   useEffect(() => {
@@ -280,7 +276,7 @@ function CreateQuizPage() {
                           ))}
                         </SelectContent>
                       </Select>
-                    
+
                       <FormMessage />
                     </FormItem>
                   )}

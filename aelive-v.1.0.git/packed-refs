@@ -1,0 +1,8 @@
+# pack-refs with: peeled fully-peeled sorted 
+9865ab0d4a19edff971f106ad7ff3536029a4546 refs/heads/aeliv-v.1.0
+a3c164f0f186d858379415baef6bd307a89e09cc refs/heads/backup-current-2025-11-09
+379a6c35ae8d7076b3b5b9e87ee1182bb1120561 refs/heads/payment
+7dac6fffffb3fa29f202d0b33f5b95469f86c3dd refs/heads/v.1.0.1
+7e8a464c7637604f40995b8382957d2d19c113c7 refs/remotes/origin/HEAD
+379a6c35ae8d7076b3b5b9e87ee1182bb1120561 refs/remotes/origin/payment
+7e8a464c7637604f40995b8382957d2d19c113c7 refs/remotes/origin/v.1.0.1

@@ -62,8 +62,8 @@ export async function adminCreateQuiz(input: QuizSchemaType) {
         lessonId: data.lessonId || null,
       },
     });
-  } catch (err: any) {
-    if (err.code === "P2002") {
+  } catch (err: unknown) {
+    if (err instanceof Error && "code" in err && err.code === "P2002") {
       return { status: "error" as const, message: "Quiz already exists." };
     }
     console.error("Create quiz error:", err);

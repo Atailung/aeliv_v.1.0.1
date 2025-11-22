@@ -3,13 +3,13 @@ import { notFound } from "next/navigation";
 import QuizPreview from "./_components/QuizPreview";
 
 interface QuizPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function QuizPage({ params }: QuizPageProps) {
-  const { id } = params;
+  const { id } = await params;
 
   try {
     const data = await getUserQuizData(id);

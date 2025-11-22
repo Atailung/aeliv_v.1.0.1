@@ -4,7 +4,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { CheckCircle2, Circle, Trophy } from "lucide-react";
+import { CheckCircle2, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Question = {
@@ -92,7 +92,7 @@ export default function QuizSidebar({
                   key={question.id}
                   onClick={() => onQuestionNavigate(index)}
                   className={cn(
-                    "relative aspect-square rounded-lg font-bold text-sm transition-all",
+                    "relative aspect-square rounded-full font-bold text-sm transition-all",
                     "hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
                     isCurrent
                       ? "bg-primary text-primary-foreground shadow-md ring-2 ring-primary ring-offset-2"

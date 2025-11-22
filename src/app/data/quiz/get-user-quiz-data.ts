@@ -41,6 +41,7 @@ export const getUserQuizData = cache(
         lessonId: true,
         createdAt: true,
         updatedAt: true,
+        category: true,
         lesson: {
           select: {
             id: true,

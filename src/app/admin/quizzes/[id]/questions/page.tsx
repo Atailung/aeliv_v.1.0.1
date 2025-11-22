@@ -1,8 +1,7 @@
 import { getAdminQuizData } from "@/app/data/quiz/get-admin-quiz-data";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
-import { Button } from "@/components/ui/button";
 import { CreateQuestionDialog } from "./_components/CreateQuestionDialog";
 import { QuestionsList } from "./_components/QuestionsList";
 

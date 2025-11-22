@@ -236,6 +236,7 @@ model Quiz {
   lessonId    String?
   level       Quizlevel      @default(EASY)
   category    CourseCategory @default(WEB_DEVELOPMENT)
+  status      CourseStatus   @default(DRAFT)
 
   lesson    Lesson?       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   questions Question[]
@@ -256,6 +257,7 @@ model Question {
   order    Int // question number
 
   options Option[]
+  answers UserAnswer[]
 }
 
 model Option {
@@ -291,6 +293,7 @@ model UserAnswer {
   attempt   QuizAttempt @relation(fields: [attemptId], references: [id])
 
   questionId String
+  question   Question @relation(fields: [questionId], references: [id])
   selectedId String? // option selected by user
   isCorrect  Boolean  @default(false)
   answeredAt DateTime @default(now())

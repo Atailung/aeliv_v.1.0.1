@@ -1,0 +1,11 @@
+# pack-refs with: peeled fully-peeled sorted 
+6a96c707fbec6688da8d9e1c2af64606434e370f refs/heads/aeliv-v.1.0
+a3c164f0f186d858379415baef6bd307a89e09cc refs/heads/backup-current-2025-11-09
+379a6c35ae8d7076b3b5b9e87ee1182bb1120561 refs/heads/payment
+e7c02b7cca9b61ce1e19b4c5a65b33379c8dc289 refs/heads/quiz-admin
+7dac6fffffb3fa29f202d0b33f5b95469f86c3dd refs/heads/v.1.0.1
+379a6c35ae8d7076b3b5b9e87ee1182bb1120561 refs/pull/1/head
+7e8a464c7637604f40995b8382957d2d19c113c7 refs/remotes/origin/HEAD
+379a6c35ae8d7076b3b5b9e87ee1182bb1120561 refs/remotes/origin/payment
+e7c02b7cca9b61ce1e19b4c5a65b33379c8dc289 refs/remotes/origin/quiz-admin
+7e8a464c7637604f40995b8382957d2d19c113c7 refs/remotes/origin/v.1.0.1

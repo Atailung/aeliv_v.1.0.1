@@ -89,14 +89,19 @@ export function CreateQuestionDialog({ quizId }: CreateQuestionDialogProps) {
 
   function onSubmit(values: QuestionFormValues) {
     startTransition(async () => {
-      let choices: any = null;
+      let choices: Array<{
+        id: string;
+        text: string;
+        isCorrect: boolean;
+      }> | null = null;
 
       if (values.type === "SINGLE_CHOICE" || values.type === "MULTI_CHOICE") {
-        choices = values.choices?.map((choice, index) => ({
-          id: `choice_${index}`,
-          text: choice.text,
-          isCorrect: choice.isCorrect,
-        }));
+        choices =
+          values.choices?.map((choice, index) => ({
+            id: `choice_${index}`,
+            text: choice.text,
+            isCorrect: choice.isCorrect,
+          })) || null;
       } else if (values.type === "TRUE_FALSE") {
         choices = [
           {

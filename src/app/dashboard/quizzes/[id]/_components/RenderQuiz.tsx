@@ -11,6 +11,7 @@ import { userSubmitQuiz } from "../action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import QuizSidebar from "./QuizSidebar";
+import { useConfetti } from "@/hooks/use-confetti";
 
 interface RenderQuizProps {
   quiz: UserQuizDataType["quiz"];
@@ -22,14 +23,14 @@ type Answer = {
   selectedOptionIds?: string[];
 };
 
-function RenderQuiz({ quiz, userProgress }: RenderQuizProps) {
+function RenderQuiz({ quiz, userProgress: _userProgress }: RenderQuizProps) {
   const router = useRouter();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, Answer>>({});
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [startTime] = useState(new Date());
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const { triggerConfetti } = useConfetti();
   const currentQuestion = quiz.questions[currentQuestionIndex];
   const totalQuestions = quiz.questions.length;
   const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
@@ -90,6 +91,7 @@ function RenderQuiz({ quiz, userProgress }: RenderQuizProps) {
 
       if (result.status === "success" && result.data) {
         toast.success(result.message);
+        triggerConfetti();
         router.push(
           `/dashboard/quizzes/${quiz.id}/results/${result.data.attemptId}`
         );
@@ -97,6 +99,7 @@ function RenderQuiz({ quiz, userProgress }: RenderQuizProps) {
         toast.error(result.message);
       }
     } catch (error) {
+      console.error("Submit quiz error:", error);
       toast.error("Failed to submit quiz");
     } finally {
       setIsSubmitting(false);
